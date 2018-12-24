@@ -18,22 +18,41 @@ public:
 class Apple
 {
 public:
+	Apple()
+	{
+		NewApple();
+	}
 	void Draw()
 	{
-
+		circle(_x * 48 + 160 + 24, _y * 48 + 24, 15);
+	}
+	void NewApple()
+	{
+		_x = rand() % 10;
+		_y = rand() % 10;
 	}
 private:
 	int _x;
 	int _y;
 };
 
+enum Direction
+{
+	Up,
+	Down,
+	Left,
+	Right,
+};
+
 class Snake
 {
 public:
+	
 	Snake()
 	{
 		POINT head = { 1,1 };
 		_bodyList.push_back(head);
+		_dir = Direction::Right;
 
 		POINT p1 = { 1,2 };
 		POINT p2 = { 1,3 };
@@ -41,6 +60,54 @@ public:
 		_bodyList.push_back(p1);
 		_bodyList.push_back(p2);
 		_bodyList.push_back(p3);
+	}
+	void ChangeDirection(Direction dir)
+	{
+		if (_dir == Direction::Up && dir == Direction::Down
+			|| _dir == Direction::Down && dir == Direction::Up
+			|| _dir == Direction::Right && dir == Direction::Left
+			|| _dir == Direction::Left && dir == Direction::Right)
+		{
+			return;
+		}
+
+		_dir = dir;
+	}
+	void Update()
+	{
+		int x0ffset[4] = { 0,0,-1,1 };
+		int y0ffset[4] = { -1,1,0,0 };
+
+		static int lastMoveTick = 0;
+		int curTick = GetTickCount();
+
+		if (curTick - lastMoveTick < 500)
+		{
+			return;
+		}
+
+		lastMoveTick = curTick;
+
+		std::list<POINT>::iterator it = _bodyList.begin();
+
+		int prevX = it->x;
+		int prevY = it->y;
+		it->x += x0ffset[_dir];
+		it->y += y0ffset[_dir];
+
+		it++;
+
+		for (; it != _bodyList.end(); it++)
+		{
+			int curX = it->x;
+			int curY = it->y;
+
+			it->x = prevX;
+			it->y = prevY;
+
+			prevX = curX;
+			prevY = curY;
+		}
 	}
 	void Draw()
 	{
@@ -58,6 +125,7 @@ public:
 	}
 private:
 	std::list<POINT> _bodyList;
+	int _dir;
 };
 
 class UI
@@ -86,6 +154,7 @@ bool IsKeyDown(int key)
 
 void Draw()
 {
+	cleardevice();
 	snake.Draw();
 	wall.Draw();
 	apple.Draw();
@@ -99,11 +168,27 @@ void KeyboardControl()
 		isGameRunning = false;
 		return;
 	}
+	if (IsKeyDown(VK_LEFT))
+	{
+		snake.ChangeDirection(Direction::Left);
+	}
+	if (IsKeyDown(VK_RIGHT))
+	{
+		snake.ChangeDirection(Direction::Right);
+	}
+	if (IsKeyDown(VK_UP))
+	{
+		snake.ChangeDirection(Direction::Up);
+	}
+	if (IsKeyDown(VK_DOWN))
+	{
+		snake.ChangeDirection(Direction::Down);
+	}
 }
 
 void HandleLogic()
 {
-
+	snake.Update();
 }
 
 
