@@ -2,16 +2,11 @@
 #include <Windows.h>
 #include "setting.h"
 #include "class.h"
-//#include "function.cpp"
 
 //全局变量beign
 bool isGameRunning = true;
+bool isGameStarting = true;
 //全局变量end
-
-
-
-
-
 
 //全局范围添加4个对象定义
 Snake snake;
@@ -20,35 +15,8 @@ Apple apple;
 UI ui;
 Parameter parameter;
 
-bool IsKeyDown(int key)
-{//判断键盘是否按下
-	return (GetAsyncKeyState(key) & 0x8000 ? 1 : 0);
-}
 
-void KeyboardControl()
-{
-	if (IsKeyDown(VK_ESCAPE))
-	{
-		isGameRunning = false;
-		return;
-	}
-	if (IsKeyDown(VK_LEFT))
-	{
-		snake.ChangeDirection(Direction::Left);
-	}
-	if (IsKeyDown(VK_RIGHT))
-	{
-		snake.ChangeDirection(Direction::Right);
-	}
-	if (IsKeyDown(VK_UP))
-	{
-		snake.ChangeDirection(Direction::Up);
-	}
-	if (IsKeyDown(VK_DOWN))
-	{
-		snake.ChangeDirection(Direction::Down);
-	}
-}
+
 
 void HandleLogic()
 {
@@ -64,9 +32,16 @@ int main()
 	settextcolor(BLACK);
 	cleardevice();
 
+	while (isGameStarting)
+	{
+		KeyboardControl(isGameRunning, isGameStarting,snake);
+		Draw_start(ui);
+		Sleep(30);
+	}
+
 	while (isGameRunning)
 	{
-		KeyboardControl();
+		KeyboardControl(isGameRunning,isGameStarting, snake);
 		HandleLogic();
 		Draw(snake,wall,apple,ui);
 		Sleep(30);

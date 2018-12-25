@@ -8,5 +8,45 @@ void Draw(Snake & snake, Wall & wall, Apple & apple, UI & ui)
 	snake.Draw();
 	wall.Draw();
 	apple.Draw();
-	ui.Draw();
+	ui.Draw_GameRunning();
+}
+
+bool IsKeyDown(int key)
+{//ÅÐ¶Ï¼üÅÌÊÇ·ñ°´ÏÂ
+	return (GetAsyncKeyState(key) & 0x8000 ? 1 : 0);
+}
+
+void KeyboardControl(bool &isGameRunning,bool &isGameStarting,Snake & snake)
+{
+	if (IsKeyDown(VK_ESCAPE))
+	{
+		isGameRunning = false;
+		return;
+	}
+	if (IsKeyDown(VK_LEFT))
+	{
+		snake.ChangeDirection(Direction::Left);
+	}
+	if (IsKeyDown(VK_RIGHT))
+	{
+		snake.ChangeDirection(Direction::Right);
+	}
+	if (IsKeyDown(VK_UP))
+	{
+		snake.ChangeDirection(Direction::Up);
+	}
+	if (IsKeyDown(VK_DOWN))
+	{
+		snake.ChangeDirection(Direction::Down);
+	}
+	if (IsKeyDown(VK_RETURN))
+	{
+		isGameStarting = false;
+		isGameRunning = true;
+	}
+}
+
+void Draw_start(UI & ui)
+{
+	ui.Draw_preparing();
 }

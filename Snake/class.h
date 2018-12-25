@@ -152,7 +152,7 @@ private:
 class UI
 {
 public:
-	void Draw()
+	void Draw_GameRunning()
 	{
 		RECT scoreRect = { 10,10,140,50 };
 		drawtext("分数", &scoreRect, DT_CENTER);
@@ -160,7 +160,20 @@ public:
 		RECT levelRect = { 10,240,140,290 };
 		drawtext("难度", &levelRect, DT_CENTER);
 	}
+	void Draw_preparing()
+	{
+		RECT helloRect = { 0,0,640,480 };
+		drawtext("欢迎游玩贪吃蛇", &helloRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+		RECT startRect = { 480,320,640,480 };
+		drawtext("按下任意键继续......", &startRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	}
 };
 
 
 void Draw(Snake & snake, Wall & wall, Apple & apple, UI & ui);
+void Draw_start(UI & ui);
+
+bool IsKeyDown(int key);
+
+void KeyboardControl(bool &isGameRunning,bool &isGameStarting,Snake & snake);
