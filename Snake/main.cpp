@@ -1,11 +1,16 @@
 #include <graphics.h>
 #include <Windows.h>
-
+#include "setting.h"
 #include "class.h"
+//#include "function.cpp"
 
 //全局变量beign
 bool isGameRunning = true;
 //全局变量end
+
+
+
+
 
 
 //全局范围添加4个对象定义
@@ -13,20 +18,11 @@ Snake snake;
 Wall wall;
 Apple apple;
 UI ui;
-
+Parameter parameter;
 
 bool IsKeyDown(int key)
 {//判断键盘是否按下
 	return (GetAsyncKeyState(key) & 0x8000 ? 1 : 0);
-}
-
-void Draw()
-{
-	cleardevice();
-	snake.Draw();
-	wall.Draw();
-	apple.Draw();
-	ui.Draw();
 }
 
 void KeyboardControl()
@@ -60,14 +56,9 @@ void HandleLogic()
 	snake.TryEat(apple);
 }
 
-
-
-
-
-
 int main()
 {
-	initgraph(640,480);
+	initgraph(parameter.window_width,parameter.window_high);
 	setbkcolor(WHITE);
 	setlinecolor(BLACK);
 	settextcolor(BLACK);
@@ -77,7 +68,7 @@ int main()
 	{
 		KeyboardControl();
 		HandleLogic();
-		Draw();
+		Draw(snake,wall,apple,ui);
 		Sleep(30);
 	}
 
