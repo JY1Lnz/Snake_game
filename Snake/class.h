@@ -3,7 +3,6 @@
 #include <list>
 
 
-
 class Wall
 {
 public:
@@ -162,3 +161,6 @@ public:
 		drawtext("дя╤х", &levelRect, DT_CENTER);
 	}
 };
+
+
+void Draw(Snake & snake, Wall & wall, Apple & apple, UI & ui);
