@@ -1,6 +1,12 @@
 #pragma once
 #include <graphics.h>
 #include <list>
+#include <sstream>
+#include <iostream>
+#include <time.h>
+#include <math.h>
+#include "stdlib.h"
+
 
 
 class Wall
@@ -25,6 +31,7 @@ public:
 	}
 	void NewApple()
 	{
+		srand((unsigned)time(NULL));
 		_x = rand() % 10;
 		_y = rand() % 10;
 	}
@@ -66,7 +73,16 @@ public:
 		_bodyList.push_back(p1);
 		_bodyList.push_back(p2);
 		_bodyList.push_back(p3);
+		_length = 4;
 	}
+
+	std::string getLength()
+	{
+		std::ostringstream os;
+		os << _length;
+		return os.str();
+	}
+
 	void ChangeDirection(Direction dir)
 	{
 		if (_dir == Direction::Up && dir == Direction::Down
@@ -125,6 +141,7 @@ public:
 			return;
 		}
 		apple.NewApple();
+		_length++;
 
 		POINT end = _bodyList.back();
 		_bodyList.push_back(end);
@@ -144,21 +161,34 @@ public:
 			}
 		}
 	}
+
 private:
 	std::list<POINT> _bodyList;
 	int _dir;
+	int _length;
 };
 
 class UI
 {
 public:
-	void Draw_GameRunning()
+	void Draw_GameRunning(Snake & snake)
 	{
+
 		RECT scoreRect = { 10,10,140,50 };
-		drawtext("分数", &scoreRect, DT_CENTER);
+		drawtext("长度", &scoreRect, DT_CENTER);
 
 		RECT levelRect = { 10,240,140,290 };
 		drawtext("难度", &levelRect, DT_CENTER);
+
+		char sLength[10];
+		std::string s = snake.getLength();
+		int sLen = s.length();
+		for (int i = 0; i < sLen; i++)
+			sLength[i] = s[i];
+		sLength[sLen] = 0;
+		RECT snakeLength = { 10,40,140,100 };
+		drawtext(sLength, &snakeLength, DT_CENTER);
+
 	}
 	void Draw_preparing()
 	{

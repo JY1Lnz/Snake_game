@@ -3,6 +3,8 @@
 #include "setting.h"
 #include "class.h"
 
+
+
 //全局变量beign
 bool isGameRunning = true;
 bool isGameStarting = true;
@@ -26,6 +28,7 @@ void HandleLogic()
 
 int main()
 {
+	
 	initgraph(parameter.window_width,parameter.window_high);
 	setbkcolor(WHITE);
 	setlinecolor(BLACK);

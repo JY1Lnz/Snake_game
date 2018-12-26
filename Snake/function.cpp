@@ -8,7 +8,7 @@ void Draw(Snake & snake, Wall & wall, Apple & apple, UI & ui)
 	snake.Draw();
 	wall.Draw();
 	apple.Draw();
-	ui.Draw_GameRunning();
+	ui.Draw_GameRunning(snake);
 }
 
 bool IsKeyDown(int key)
