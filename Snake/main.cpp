@@ -6,8 +6,9 @@
 
 
 //全局变量beign
-bool isGameRunning = true;
+bool isGameRunning = false;
 bool isGameStarting = true;
+bool isGameChoosing = false;
 //全局变量end
 
 //全局范围添加4个对象定义
@@ -37,14 +38,21 @@ int main()
 
 	while (isGameStarting)
 	{
-		KeyboardControl(isGameRunning, isGameStarting,snake);
+		KeyboardControl(isGameRunning, isGameStarting, isGameChoosing, snake);
 		Draw_start(ui);
+		Sleep(30);
+	}
+
+	while (isGameChoosing)
+	{
+		KeyboardControl(isGameRunning, isGameStarting, isGameChoosing, snake);
+		Draw_choice(ui);
 		Sleep(30);
 	}
 
 	while (isGameRunning)
 	{
-		KeyboardControl(isGameRunning,isGameStarting, snake);
+		KeyboardControl(isGameRunning,isGameStarting, isGameChoosing, snake);
 		HandleLogic();
 		Draw(snake,wall,apple,ui);
 		Sleep(30);

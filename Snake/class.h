@@ -101,9 +101,9 @@ public:
 		int y0ffset[4] = { -1,1,0,0 };
 
 		static int lastMoveTick = 0;
-		int curTick = GetTickCount();
+		int curTick = GetTickCount();//记录当前时间
 
-		if (curTick - lastMoveTick < 500)
+		if (curTick - lastMoveTick < _difficulty)//控制蛇的移动速度
 		{
 			return;
 		}
@@ -162,10 +162,16 @@ public:
 		}
 	}
 
+	void GetDifficulty(int difficulty)
+	{
+		_difficulty = difficulty;
+	}
+
 private:
 	std::list<POINT> _bodyList;
 	int _dir;
 	int _length;
+	int _difficulty = 500;
 };
 
 class UI
@@ -198,12 +204,19 @@ public:
 		RECT startRect = { 480,320,640,480 };
 		drawtext("按下任意键继续......", &startRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	}
+	
+	void Drwa_Choosing()
+	{
+		RECT choiceRect = { 0,0,640,240 };
+		drawtext("请选择难度", &choiceRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	}
 };
 
 
 void Draw(Snake & snake, Wall & wall, Apple & apple, UI & ui);
 void Draw_start(UI & ui);
+void Draw_choice(UI & ui);
 
 bool IsKeyDown(int key);
 
-void KeyboardControl(bool &isGameRunning,bool &isGameStarting,Snake & snake);
+void KeyboardControl(bool &isGameRunning,bool &isGameStarting,bool &isGameChoosing,Snake & snake);

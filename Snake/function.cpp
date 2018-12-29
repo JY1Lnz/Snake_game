@@ -16,7 +16,7 @@ bool IsKeyDown(int key)
 	return (GetAsyncKeyState(key) & 0x8000 ? 1 : 0);
 }
 
-void KeyboardControl(bool &isGameRunning,bool &isGameStarting,Snake & snake)
+void KeyboardControl(bool &isGameRunning,bool &isGameStarting,bool &isGameChoosing,Snake & snake)
 {
 	if (IsKeyDown(VK_ESCAPE))
 	{
@@ -39,14 +39,36 @@ void KeyboardControl(bool &isGameRunning,bool &isGameStarting,Snake & snake)
 	{
 		snake.ChangeDirection(Direction::Down);
 	}
-	if (IsKeyDown(VK_RETURN))
+	while(IsKeyDown(VK_RETURN))//实现界面切换
 	{
-		isGameStarting = false;
-		isGameRunning = true;
+		//当按下回车再松开时才相应回车操作
+		//防止连续的回车操作
+		if (!IsKeyDown(VK_RETURN))
+		{
+			if (isGameStarting)
+			{
+				isGameStarting = false;
+				isGameChoosing = true;
+				return;
+			}
+			if (isGameChoosing)
+			{
+				isGameChoosing = false;
+				isGameRunning = true;
+				return;
+			}
+		}
 	}
 }
 
 void Draw_start(UI & ui)
 {
+	cleardevice();
 	ui.Draw_preparing();
+}
+
+void Draw_choice(UI & ui)
+{
+	cleardevice();
+	ui.Drwa_Choosing();
 }
